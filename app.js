@@ -60,13 +60,27 @@
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
 
 const app = express();
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  res.cookie("name", "Ankurit");
-  res.send("Done");
+  // bcrypt.genSalt(10, (err, salt) => {
+  //   bcrypt.hash("Ankurit", salt, (err, hash) => {
+  //     console.log(hash);
+  //   });
+  // });
+  // res.send("hash");
+
+  bcrypt.compare(
+    "Ankurit",
+    "$2b$10$qPYtIQzHW8slJTzLuEr8BOI3MsdfIaP/LOO5qXT0GNaNlfQx6VLnS",
+    (err, result) => {
+      console.log(result);
+    }
+  );
+  res.send("hi");
 });
 
 app.get("/read", (req, res) => {
