@@ -61,6 +61,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 app.use(cookieParser());
@@ -72,20 +73,25 @@ app.get("/", (req, res) => {
   //   });
   // });
   // res.send("hash");
+  // bcrypt.compare(
+  //   "Ankurit",
+  //   "$2b$10$qPYtIQzHW8slJTzLuEr8BOI3MsdfIaP/LOO5qXT0GNaNlfQx6VLnS",
+  //   (err, result) => {
+  //     console.log(result);
+  //   }
+  // );
+  // res.send("hi");
 
-  bcrypt.compare(
-    "Ankurit",
-    "$2b$10$qPYtIQzHW8slJTzLuEr8BOI3MsdfIaP/LOO5qXT0GNaNlfQx6VLnS",
-    (err, result) => {
-      console.log(result);
-    }
-  );
+  let token = jwt.sign({ email: "Ankurit@123.com" }, "secrect");
+  res.cookie("token", token);
+  console.log(token);
   res.send("hi");
 });
 
 app.get("/read", (req, res) => {
-  console.log(req.cookies);
-  res.send("Done");
+  console.log(req.cookies.token);
+  let data = jwt.verify(req.cookies.token, "secrect");
+  res.send(data);
 });
 
 app.listen(3000);
